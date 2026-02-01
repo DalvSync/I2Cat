@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
+#include <unistd.h>
 #include "edriver.h"
 #include "font.h"   
 
@@ -54,12 +55,20 @@ void Disp_Init() {
         0x20, 0x00, 0xA1, 0xC8, 0xDA, 0x12, 0x81, 0xCF, 0xD9, 0xF1, 
         0xDB, 0x40, 0xA4, 0xA6, 0xAF
     };
-
+    
     I2C_Write(cmds, sizeof(cmds));
+
+    Disp_Clear();
+    Disp_Print(49, 10, "I2Cat", 1);
+    Disp_Print(46, 25, "v. 1.0", 1);
+    Disp_Print(31, 45, "by DalvSync", 1);
+    
+    Disp_Update();
+    usleep(2000000);
     
     Disp_Clear();
     Disp_Update();
-    printf("Lib: Screen init complete\n");
+    printf("I2Cat: Screen init complete\n");
 }
 
 //Screen cleaner

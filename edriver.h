@@ -11,13 +11,13 @@ void Disp_Clear();
 //'color' - its pixel status; 1 - pixel on, 0 - pixel off
 void Disp_Draw(int x, int y, int color);
 
-//Function to send information to display
+//Function to send image on display
 void Disp_Update();
 
-//Function to draw 1 letter 
+//Function to draw 1 letter (Example: Disp_DrawChar(10, 25, 'A', 1);)
 void Disp_DrawChar(int x, int y, char c, int color);
 
-//Function to print words on screen
+//Function to print words on screen (Example: Disp_Print(10, 25, "Hello World!", 1);)
 void Disp_Print(int x, int y, char *str, int color);
 
 #endif

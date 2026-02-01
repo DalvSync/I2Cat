@@ -60,7 +60,7 @@ void Disp_Init() {
 
     Disp_Clear();
     Disp_Print(49, 10, "I2Cat", 1);
-    Disp_Print(46, 25, "v. 1.0", 1);
+    Disp_Print(46, 25, "v. 1.1", 1);
     Disp_Print(31, 45, "by DalvSync", 1);
     
     Disp_Update();

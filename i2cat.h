@@ -1,5 +1,5 @@
-#ifndef OLED_H
-#define OLED_H
+#ifndef I2CAT_H
+#define I2CAT_H
 
 //Function to initialise display
 void Disp_Init();
@@ -19,5 +19,9 @@ void Disp_DrawChar(int x, int y, char c, int color);
 
 //Function to print words on screen (Example: Disp_Print(10, 25, "Hello World!", 1);)
 void Disp_Print(int x, int y, char *str, int color);
+
+//Function to play gif (Example: Disp_Anim(my_anim_array, define_in_anim, 100(in ms),0);)
+//For infinity animation write 0 in 'loops'
+void Disp_Anim(const unsigned char **frames, int count, int delay_ms, int loops);
 
 #endif

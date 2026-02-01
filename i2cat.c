@@ -6,7 +6,7 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <unistd.h>
-#include "edriver.h"
+#include "i2cat.h"
 #include "font.h"   
 
 #define I2C_ADDR 0x3C
@@ -60,7 +60,7 @@ void Disp_Init() {
 
     Disp_Clear();
     Disp_Print(49, 10, "I2Cat", 1);
-    Disp_Print(46, 25, "v. 1.1", 1);
+    Disp_Print(46, 25, "v. 1.2", 1);
     Disp_Print(31, 45, "by DalvSync", 1);
     
     Disp_Update();
@@ -112,4 +112,21 @@ void Disp_Update() {
     memcpy(&data_packet[1], buffer, 1024);
 
     I2C_Write(data_packet, 1025);
+
+void Disp_PlayAnim(const unsigned char **frames, int count, int delay_ms, int loops) {
+    int current_loop = 0;
+
+    while (1) {
+        if (loops > 0 && current_loop >= loops) {
+            break;
+        }
+
+        for (int i = 0; i < count; i++) {
+            memcpy(buffer, frames[i], 1024); 
+            Disp_Update();
+            usleep(delay_ms * 1000);
+        }
+        current_loop++;
+    }
+}
 }

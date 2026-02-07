@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -19,9 +20,9 @@ void I2C_Write(unsigned char* data, int len) {
     }
 }
 
-void Disp_Draw(int x, int y, int color) {
+void Disp_Draw(uint8_t x, uint8_t y, uint8_t color) {
     // Check screen borders
-    if (x < 0 || x >= 128 || y < 0 || y >= 64) {
+    if (x >= 128 || y >= 64) {
         return;
     }
 
@@ -60,7 +61,7 @@ void Disp_Init() {
 
     Disp_Clear();
     Disp_Print(49, 10, "I2Cat", 1);
-    Disp_Print(46, 25, "v. 1.2", 1);
+    Disp_Print(46, 25, "v. 1.3", 1);
     Disp_Print(31, 45, "by DalvSync", 1);
     
     Disp_Update();
@@ -77,7 +78,7 @@ void Disp_Clear() {
 }
 
 //Draw letter with a color selection
-void Disp_DrawChar(int x, int y, char c, int color) {
+void Disp_DrawChar(uint8_t x, uint8_t y, unsigned char c, uint8_t color) {
     if (c < 32 || c > 126) c = 32;
 
     int font_index = ((c - 32) * 6) + 4;
@@ -94,7 +95,7 @@ void Disp_DrawChar(int x, int y, char c, int color) {
 }
 
 // Draw a line with a color selection
-void Disp_Print(int x, int y, char *str, int color) {
+void Disp_Print(uint8_t x, uint8_t y, char *str, uint8_t color) {
     int cursor_x = x;
     while (*str) {
         Disp_DrawChar(cursor_x, y, *str, color);
@@ -112,7 +113,7 @@ void Disp_Update() {
     memcpy(&data_packet[1], buffer, 1024);
 
     I2C_Write(data_packet, 1025);
-
+}
 void Disp_PlayAnim(const unsigned char **frames, int count, int delay_ms, int loops) {
     int current_loop = 0;
 
@@ -129,4 +130,55 @@ void Disp_PlayAnim(const unsigned char **frames, int count, int delay_ms, int lo
         current_loop++;
     }
 }
+void Disp_ForceOn(uint8_t fl) {
+    unsigned char cmd[2];
+
+    cmd[0] = 0x00;
+
+    if (fl){
+        cmd[1] = 0xA5;
+    } else {
+        cmd[1] = 0xA4;
+    }
+
+    I2C_Write(cmd, 2);
+}
+void Disp_Invert(uint8_t inv) {
+    unsigned char cmd[2];
+
+    cmd[0] = 0x00;
+
+    if (inv) {
+        cmd[1] = 0xA7;
+    } else {
+        cmd[1] = 0xA6;
+    }
+
+    I2C_Write(cmd, 2);
+}
+void Disp_DLine(int x0, int y0, int x1, int y1, uint8_t color) {
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx, sy;
+
+    if (x0 < x1) sx = 1; else sx = -1;
+    if (y0 < y1) sy = 1; else sy = -1;
+
+    int err = dx - dy;
+
+    while (1) {
+        Disp_Draw(x0, y0, color);
+        if (x0 == x1 && y0 == y1){
+            break;
+        }
+        int e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
 }

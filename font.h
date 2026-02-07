@@ -1,3 +1,5 @@
+// ssd1306xled_font6x8 is by Neven Boyanov
+
 #ifndef FONT_H
 #define FONT_H
 

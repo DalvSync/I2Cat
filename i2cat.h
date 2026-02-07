@@ -36,4 +36,8 @@ void Disp_Invert(uint8_t inv);
 //Example: Disp_DLine(0, 0, 127, 63, 1); From left-top to right-bottom
 void Disp_DLine(int x0, int y0, int x1, int y1, uint8_t color);
 
+//Function to draw circle
+//Example: Disp_DrawCircle(64, 32, 30, 1);
+void Disp_DrawCircle(int x0, int y0, int r, uint8_t color);
+
 #endif

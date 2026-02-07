@@ -61,7 +61,7 @@ void Disp_Init() {
 
     Disp_Clear();
     Disp_Print(49, 10, "I2Cat", 1);
-    Disp_Print(46, 25, "v. 1.3", 1);
+    Disp_Print(46, 25, "v. 1.4", 1);
     Disp_Print(31, 45, "by DalvSync", 1);
     
     Disp_Update();
@@ -180,5 +180,30 @@ void Disp_DLine(int x0, int y0, int x1, int y1, uint8_t color) {
             err += dx;
             y0 += sy;
         }
+    }
+}
+void Disp_DrawCircle(int x0, int y0, int r, uint8_t color) {
+    int x = 0;
+    int y = r;
+    int err = 3 - 2 * r;
+
+    while (x <= y){
+        Disp_Draw(x0 + x, y0 + y, color);
+        Disp_Draw(x0 - x, y0 + y, color);
+        Disp_Draw(x0 + x, y0 - y, color);
+        Disp_Draw(x0 - x, y0 - y, color);
+        Disp_Draw(x0 + y, y0 + x, color);
+        Disp_Draw(x0 - y, y0 + x, color);
+        Disp_Draw(x0 + y, y0 - x, color);
+        Disp_Draw(x0 - y, y0 - x, color);
+
+        if (err > 0){
+            err += 4 * (x - y) + 10;
+            y--; 
+        } else {
+            err += 4 * x + 6;
+        }
+
+        x++;
     }
 }
